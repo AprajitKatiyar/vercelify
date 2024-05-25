@@ -22,7 +22,7 @@ export default function Card({
   webUrl,
   handleOnClick,
 }: cardProps) {
-  const [url, setUrl] = useState<string>("");
+  const [url, setUrl] = useState<string>(isDeployed ? webUrl : "");
 
   return (
     <div className="p-4 w-[520px] bg-white shadow-lg border">
@@ -39,7 +39,11 @@ export default function Card({
           readOnly={isDeployed}
         ></input>
         <button
-          className="w-full border bg-black text-white rounded-md p-2 hover:bg-black-200"
+          className={`w-full border rounded-md p-2 ${
+            buttonText == "Upload" || buttonText == "Visit Website"
+              ? "bg-black text-white hover:bg-black-200"
+              : "bg-gray-400 text-gray-600 cursor-not-allowed"
+          }`}
           onClick={() => handleOnClick(url)}
         >
           {buttonText}
