@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 import axios from "axios";
 import Card from "@/components/Card";
-const BACKEND_UPLOAD_URL = "http://localhost:3000";
 export default function Home() {
   const router = useRouter();
   const [buttonText, setButtonText] = useState<string>("Upload");
@@ -26,14 +25,17 @@ export default function Home() {
         handleOnClick={async (repoUrl?: string | null) => {
           setInProcess(true);
           setButtonText("Uploading...");
-          const res = await axios.post(`${BACKEND_UPLOAD_URL}/deploy`, {
-            repoUrl: repoUrl,
-          });
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/deploy`,
+            {
+              repoUrl: repoUrl,
+            }
+          );
           setUploadId(res.data.id);
           setButtonText(`Deploying(${res.data.id})`);
           const interval = setInterval(async () => {
             const response = await axios.get(
-              `${BACKEND_UPLOAD_URL}/status?id=${res.data.id}`
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/status?id=${res.data.id}`
             );
 
             if (response.data.status === "deployed") {
